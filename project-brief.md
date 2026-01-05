@@ -1,25 +1,76 @@
-A mobile react native app for iOS and Android based on publishing one daily comment for a specific area. There is a priority for comments:
-- country
-- city
-- specific area
+# Project Brief
 
-wherein seeing a country's comments will show comments for that specific country, all the cities within, and the specific areas.
-Seeing a city will show all the comments for that city, then all the comments within.
-Seeing comments for a specific area will only show it for that area.
-E.G.:
+A mobile React Native app for iOS and Android based on publishing one daily comment for a specific area.
+
+## Location Hierarchy
+
+Comments exist in a three-tier hierarchy:
+- Country
+- City
+- Specific area (user-created pins)
+
+Viewing a country shows comments for that country, all cities within, and all specific areas.
+Viewing a city shows comments for that city and all specific areas within.
+Viewing a specific area shows only comments for that pin.
+
+**Example:**
 A user posts a comment for a church in London in the UK.
-Users looking at the UK can see this comment, users looking at London can see this comment, users looking at the church can see this comment.
-Users looking at the UK and Plymouth cannot see this comment. Users looking at the UK and London, but Parliament, cannot see this church's comment.
+- Users viewing the UK can see this comment
+- Users viewing London can see this comment
+- Users viewing the church pin can see this comment
+- Users viewing Plymouth cannot see this comment
+- Users viewing Parliament (different pin in London) cannot see this comment
 
-Other users can only like and dislike a comment - this is the only means of interaction.
-People can select the areas by map, with high ranking comments for that day popping up (e.g. if in Birmingham there has been an incredibly popular comment, when looking at the UK it may pop up with a note at Birmingham, signifying to the user that there is thriving message activity here. If this message in Birmingham is popular enough, it will show to users that are scrolled out on the planet level.) Pop-up messages cannot occur too close to each other for clumping reasons.
+## Specific Areas (Pins)
 
-To select an area, open the map and the current closest thing will be highlighted. In the case of specific areas which cannot be highlighted, users can drag and drop a pin on the map to specify where they would like to place their message.
-The user is then sent to the page of that area, which automatically shows the top comments of the day. The user can sort by new, top most liked, top most disliked, and old, then they can filter dates to see the message history of the area.
+Specific areas are handled via user-created pins (similar to Pokemon Go):
+- Users can drop a pin on the map when posting a comment to a location that doesn't have one
+- A minimum distance threshold prevents duplicate pins for the same location
+- Pin naming uses Google Places API reverse lookup - when a user drops a pin, the app suggests nearby known places ("Did you mean St. Paul's Cathedral?") and inherits the name if confirmed
+- Since users can only post one message per day, they can only create one pin per day, preventing pin spam
 
-Messages are filtered for abuse before being sent & auto-translated to the reader.
+## Interaction
 
+- Users can post one comment per day
+- Other users can only like or dislike comments - no other interaction
+- Comments bubble up through the hierarchy based on popularity
 
+## Map & Discovery
 
+- Users select areas via an interactive map with a heat map overlay showing comment activity
+- High-ranking comments pop up on the map (e.g., a popular Birmingham comment shows when viewing the UK)
+- If popular enough, comments can appear at the planet zoom level
+- Pop-up messages have a minimum distance threshold to prevent clumping
+- The current closest area is highlighted when opening the map
 
-First time experience: A user creates an account, logs in, then must pick a geographical area to inspect. There is a heat map of comments. The user will start zoomed into the country their device is registered to be in at that moment, though they can zoom out if they please to move to any area. Upon selecting their area they are prompted to write a message, then scroll through others and give one a like or dislike.
+## Area Page
+
+Upon selecting an area, users see the top comments of the day. Sorting options:
+- New
+- Top most liked
+- Top most disliked
+- Old
+
+Users can filter by date to see the message history of an area.
+
+## Content Moderation & Translation
+
+- Messages are filtered for abuse using a word-list library (e.g., `bad-words` or `leo-profanity`)
+- Auto-translation via LibreTranslate (self-hosted) or MyMemory API (free tier)
+
+## First Time Experience
+
+1. User creates an account and logs in
+2. Presented with a map showing a heat map of comments
+3. Starts zoomed into their current country (based on device location), can zoom out to anywhere
+4. Selects an area
+5. Prompted to write a message
+6. Scrolls through others and gives one a like or dislike
+
+## Launch Strategy (Cold-Start)
+
+- Geo-focused launch: Start in one city to build comment density before expanding
+- Seed content: Team posts interesting comments in key locations before launch
+- "Be the first" messaging: Frame empty areas as opportunities
+- Historical view: Show older comments rather than hiding them
+- Local partnerships: Work with local influencers in the launch city
